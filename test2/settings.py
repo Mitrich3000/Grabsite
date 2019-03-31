@@ -117,6 +117,4 @@ EMAIL_HOST_PASSWORD = '*****'
 SERVER_EMAIL = EMAIL_HOST_USER
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
 SITE_URL = 'https:\\example.com'

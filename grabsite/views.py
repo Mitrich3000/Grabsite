@@ -28,7 +28,7 @@ def index(request, **kwargs):
 class WeekDayChartJSONView(BaseLineChartView):
     def get_labels(self):
         """Return 7 labels for the x-axis."""
-        return ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"]
+        return ["Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"]
 
     def get_providers(self):
         """Return names of datasets."""
@@ -39,7 +39,7 @@ class WeekDayChartJSONView(BaseLineChartView):
 
         qs = Advertisement.objects.annotate(weekday=ExtractWeekDay('posted')).values('weekday').annotate(
             count=Count('id')).values_list('weekday', 'count')
-        data = {i: 0 for i in range(7)}
+        data = {i: 0 for i in range(1,8)}
         data.update(qs)
         data = [[v for k, v in data.items()]]
 
