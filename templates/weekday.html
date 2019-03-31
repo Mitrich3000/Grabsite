@@ -1,0 +1,27 @@
+{% load staticfiles %}
+<html>
+<head>
+    <title>Графики</title>
+    <!--[if lte IE 8]>
+            <script src="{% static 'js/excanvas.js' %}"></script>
+        <![endif]-->
+</head>
+<body>
+
+<h1>График популярного дня недели</h1>
+
+<canvas id="weekdayChart" width="400" height="300"></canvas>
+
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
+<script type="text/javascript" src="{% static 'js/Chart.min.js' %}"></script>
+<script type="text/javascript">
+    $.get('{% url "weekday_chart_json" %}', function (data) {
+        var ctx = $("#weekdayChart").get(0).getContext("2d");
+        new Chart(ctx, {
+            type: 'bar', data: data
+        });
+    });
+
+</script>
+</body>
+</html>

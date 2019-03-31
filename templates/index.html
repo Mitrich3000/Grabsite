@@ -2,12 +2,16 @@
 {% block title %}Ввод данных{% endblock %}
 
 {% block content %}
-    <div class="col-12">
 
+    <div class="col-12 text-center">
+        <h3>Форма ввода данных</h3>
+        <br>
         <form method="post" action="." enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <input type="submit" value="Получить отчет"/>
+            <div class="form-group">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <input type="submit" value="Получить отчет"/>
         </form>
+    </div>
     </div>
 {% endblock content %}

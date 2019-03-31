@@ -1,27 +1,29 @@
-from celery.task import task
-from grab import Grab
-import requests
-import bs4
-from django.core.mail import send_mail
 import re
 from datetime import datetime
-import logging
+import bs4
+import requests
+from celery.task import task
+from django.core.mail import send_mail
+
 from .models import Advertisement
+from test2 import settings
 
 
 @task
-def mail_sent(order_id):
+def mail_sent():
     """
     Task to send an e-mail notification when an order is
     successfully created.
     """
-    url = 'https:\\mysite.com\\result'
+    url1 = settings.SITE_URL + '\wweekday_chart'
+    url2 = settings.SITE_URL + '\wtime_chart'
     subject = 'Анализ запрошенного ресурса'
-    message = 'Графики по анализу запрошенного ресурса {}.'.format(url)
+    message = 'График популярного дня недели {0}, график популярного часа {1}'.format(url1, url2)
     mail_sent = send_mail(subject,
                           message,
                           'admin@myshop.com',
                           ['user@mail.ru,'])
+    print(message)
     return mail_sent
 
 
@@ -43,11 +45,9 @@ def data_mining(links):
 
 
 @task
-def parsing():
+def parsing(url):
     # parsing url
     links = []
-    url = 'https://www.olx.ua/nedvizhimost/kvartiry-komnaty/arenda-kvartir-komnat/'
-
     try:
         data = requests.get(url)
         dom = bs4.BeautifulSoup(data.text, features="lxml")
@@ -63,5 +63,6 @@ def parsing():
         Advertisement.objects.all()._raw_delete(advertisements.db)
     Advertisement.objects.bulk_create(data_mining(links))
     print('Данные добавлены')
+    #mail_sent()
     # show graph
     return url
