@@ -15,10 +15,9 @@ def mail_sent():
     Task to send an e-mail notification when an order is
     successfully created.
     """
-    url1 = settings.SITE_URL + '\wweekday_chart'
-    url2 = settings.SITE_URL + '\wtime_chart'
+    url = settings.SITE_URL + '\charts'
     subject = 'Анализ запрошенного ресурса'
-    message = 'График популярного дня недели {0}, график популярного часа {1}'.format(url1, url2)
+    message = 'Графики популярного часа дня и дня недели {}'.format(url)
     mail_sent = send_mail(subject,
                           message,
                           'admin@myshop.com',
@@ -26,7 +25,7 @@ def mail_sent():
     print(message)
     return mail_sent
 
-@task
+
 def data_mining(links):
     date_list = []
     for link in links:
@@ -56,13 +55,13 @@ def parsing(url):
     except:
         print('Error grabbing')
     # grab links
-    data_mining(links)
+    data = data_mining(links)
+
     # add dates in model
     advertisements = Advertisement.objects.all()
     if advertisements.exists():
         Advertisement.objects.all()._raw_delete(advertisements.db)
-    Advertisement.objects.bulk_create(data_mining(links))
+    Advertisement.objects.bulk_create(data)
     print('Данные добавлены')
     # mail_sent()
-    # show graph
     return url

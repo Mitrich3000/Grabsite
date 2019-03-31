@@ -14,7 +14,8 @@ def index(request, **kwargs):
         form = MyForm(request.POST)
         if form.is_valid():
             # launch asynchronous task
-            parsing.delay(url=form.cleaned_data['url'])
+            # parsing.delay(url=form.cleaned_data['url'])
+            parsing(url=form.cleaned_data['url'])
 
             return redirect('index')
         else:
@@ -39,11 +40,14 @@ class WeekDayChartJSONView(BaseLineChartView):
 
         qs = Advertisement.objects.annotate(weekday=ExtractWeekDay('posted')).values('weekday').annotate(
             count=Count('id')).values_list('weekday', 'count')
-        data = {i: 0 for i in range(1,8)}
+        data = {i: 0 for i in range(1, 8)}
         data.update(qs)
         data = [[v for k, v in data.items()]]
 
         return data
+
+    def get_colors(self):
+        yield (255, 0, 0)
 
 
 class TimeChartJSONView(BaseLineChartView):
@@ -67,8 +71,11 @@ class TimeChartJSONView(BaseLineChartView):
 
         return data
 
+    def get_colors(self):
+        yield (255, 0, 132)
 
-weekday_chart = TemplateView.as_view(template_name='weekday.html')
+
+charts = TemplateView.as_view(template_name='charts.html')
 weekday_chart_json = WeekDayChartJSONView.as_view()
-time_chart = TemplateView.as_view(template_name='poptime.html')
+# time_chart = TemplateView.as_view(template_name='charts.html')
 time_chart_json = TimeChartJSONView.as_view()
