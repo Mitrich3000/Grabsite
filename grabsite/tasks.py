@@ -5,8 +5,8 @@ import requests
 from celery.task import task
 from django.core.mail import send_mail
 
-from .models import Advertisement
 from test2 import settings
+from .models import Advertisement
 
 
 @task
@@ -26,7 +26,7 @@ def mail_sent():
     print(message)
     return mail_sent
 
-
+@task
 def data_mining(links):
     date_list = []
     for link in links:
@@ -63,6 +63,6 @@ def parsing(url):
         Advertisement.objects.all()._raw_delete(advertisements.db)
     Advertisement.objects.bulk_create(data_mining(links))
     print('Данные добавлены')
-    #mail_sent()
+    # mail_sent()
     # show graph
     return url

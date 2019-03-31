@@ -14,9 +14,9 @@ def index(request, **kwargs):
         form = MyForm(request.POST)
         if form.is_valid():
             # launch asynchronous task
-            parsing(url=form.cleaned_data['url'])
+            parsing.delay(url=form.cleaned_data['url'])
 
-            return redirect('weekday_chart')
+            return redirect('index')
         else:
             print(form.errors)
     else:
