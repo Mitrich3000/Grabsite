@@ -15,7 +15,7 @@ def index(request, **kwargs):
         if form.is_valid():
             # launch asynchronous task
             # parsing.delay(url=form.cleaned_data['url'])
-            parsing(url=form.cleaned_data['url'])
+            parsing(user=request.user, url=form.cleaned_data['url'])
 
             return redirect('index')
         else:

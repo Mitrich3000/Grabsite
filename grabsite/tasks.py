@@ -26,7 +26,7 @@ def mail_sent():
     return mail_sent
 
 
-def data_mining(links):
+def data_mining(user, links):
     date_list = []
     for link in links:
         data = requests.get(link)
@@ -37,14 +37,14 @@ def data_mining(links):
         s = s[1].strip()
         date_str = s.replace('марта', '3') + ' ' + time.group()
         date = datetime.strptime(date_str, '%d %m %Y %H:%S')
-        advertisement = Advertisement(posted=date.astimezone())
+        advertisement = Advertisement(user=user, posted=date.astimezone())
         date_list.append(advertisement)
 
     return date_list
 
 
 @task
-def parsing(url):
+def parsing(user, url):
     # parsing url
     links = []
     try:
@@ -55,7 +55,7 @@ def parsing(url):
     except:
         print('Error grabbing')
     # grab links
-    data = data_mining(links)
+    data = data_mining(user, links)
 
     # add dates in model
     advertisements = Advertisement.objects.all()
