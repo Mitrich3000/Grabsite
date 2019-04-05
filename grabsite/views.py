@@ -1,14 +1,17 @@
-from chartjs.views.lines import BaseLineChartView
-from django.db.models.aggregates import Count
-from django.db.models.functions import ExtractWeekDay, ExtractHour
-from django.shortcuts import render, redirect
-from django.views.generic import TemplateView
+import json
 
-from grabsite.models import Advertisement
+from chartjs.views.lines import BaseLineChartView
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import render, redirect
+from django.views.generic import TemplateView, ListView, DetailView
+
+from grabsite.models import Urls
 from .forms import MyForm
 from .tasks import parsing
 
 
+@login_required
 def index(request, **kwargs):
     if request.method == 'POST':
         form = MyForm(request.POST)
@@ -17,7 +20,7 @@ def index(request, **kwargs):
             # parsing.delay(url=form.cleaned_data['url'])
             parsing(user=request.user, url=form.cleaned_data['url'])
 
-            return redirect('index')
+            return redirect('grabsite:list')
         else:
             print(form.errors)
     else:
@@ -26,7 +29,23 @@ def index(request, **kwargs):
     return render(request, 'index.html', {"form": form})
 
 
+class UrlsDetailView(LoginRequiredMixin, DetailView):
+    model = Urls
+    template_name = 'charts.html'
+
+
+class UrlListView(LoginRequiredMixin, ListView):
+    model = Urls
+    template_name = 'list.html'
+
+    def get_queryset(self):
+        queryset = Urls.objects.all().order_by("-grabed")
+        return queryset
+
+
 class WeekDayChartJSONView(BaseLineChartView):
+    id = 9
+
     def get_labels(self):
         """Return 7 labels for the x-axis."""
         return ["Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"]
@@ -38,11 +57,7 @@ class WeekDayChartJSONView(BaseLineChartView):
     def get_data(self):
         """Return datasets to plot."""
 
-        qs = Advertisement.objects.annotate(weekday=ExtractWeekDay('posted')).values('weekday').annotate(
-            count=Count('id')).values_list('weekday', 'count')
-        data = {i: 0 for i in range(1, 8)}
-        data.update(qs)
-        data = [[v for k, v in data.items()]]
+        data = json.loads(Urls.objects.get(pk=self.id).weekday)
 
         return data
 
@@ -51,6 +66,7 @@ class WeekDayChartJSONView(BaseLineChartView):
 
 
 class TimeChartJSONView(BaseLineChartView):
+    id = 9
     def get_labels(self):
         """Return 7 labels for the x-axis."""
         labels = [i for i in range(24)]
@@ -63,11 +79,7 @@ class TimeChartJSONView(BaseLineChartView):
     def get_data(self):
         """Return datasets to plot."""
 
-        qs = Advertisement.objects.annotate(poptime=ExtractHour('posted')).values('poptime').annotate(
-            count=Count('id')).values_list('poptime', 'count')
-        data = {i: 0 for i in range(24)}
-        data.update(qs)
-        data = [[v for k, v in data.items()]]
+        data = json.loads(Urls.objects.get(pk=self.id).poptime)
 
         return data
 
@@ -77,5 +89,4 @@ class TimeChartJSONView(BaseLineChartView):
 
 charts = TemplateView.as_view(template_name='charts.html')
 weekday_chart_json = WeekDayChartJSONView.as_view()
-# time_chart = TemplateView.as_view(template_name='charts.html')
 time_chart_json = TimeChartJSONView.as_view()

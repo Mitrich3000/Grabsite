@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title %}Ввод данных{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h3>Список обработанных страниц</h3>
+                <br>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Адрес</th>
+                        <th scope="col">Дата обработки</th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for url in urls_list %}
+                        <tr>
+                            <th scope="row">{{ forloop.counter }}</th>
+                            <td><a href="{% url 'grabsite:detail' url.pk %}">{{ url.name }}</a></td>
+                            <td>{{ url.grabed }}</td>
+                        </tr>
+                    {% endfor %}
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
