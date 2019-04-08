@@ -19,7 +19,7 @@
                     <tbody>
                     {% for url in urls_list %}
                         <tr>
-                            <th scope="row">{{ forloop.counter }}</th>
+                            <th scope="row">{{ forloop.revcounter }}</th>
                             <td><a href="{% url 'grabsite:detail' url.pk %}">{{ url.name }}</a></td>
                             <td>{{ url.grabed }}</td>
                         </tr>

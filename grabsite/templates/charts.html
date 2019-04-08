@@ -22,14 +22,14 @@
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.0.min.js"></script>
 <script type="text/javascript" src="{% static 'js/Chart.min.js' %}"></script>
 <script type="text/javascript">
-    $.get('{% url "grabsite:time_chart_json" %}', function (data) {
+    $.get('{% url "grabsite:time_chart_json" object.pk %}', function (data) {
         var ctx = $("#timeChart").get(0).getContext("2d");
         new Chart(ctx, {
             type: 'bar', data: data
         });
     });
 
-    $.get('{% url "grabsite:weekday_chart_json" %}', function (data) {
+    $.get('{% url "grabsite:weekday_chart_json" object.pk %}', function (data) {
         var ctx = $("#weekdayChart").get(0).getContext("2d");
         new Chart(ctx, {
             type: 'bar', data: data

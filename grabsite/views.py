@@ -44,8 +44,6 @@ class UrlListView(LoginRequiredMixin, ListView):
 
 
 class WeekDayChartJSONView(BaseLineChartView):
-    id = 9
-
     def get_labels(self):
         """Return 7 labels for the x-axis."""
         return ["Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"]
@@ -57,7 +55,7 @@ class WeekDayChartJSONView(BaseLineChartView):
     def get_data(self):
         """Return datasets to plot."""
 
-        data = json.loads(Urls.objects.get(pk=self.id).weekday)
+        data = json.loads(Urls.objects.get(pk=self.kwargs['pk']).weekday)
 
         return data
 
@@ -66,7 +64,6 @@ class WeekDayChartJSONView(BaseLineChartView):
 
 
 class TimeChartJSONView(BaseLineChartView):
-    id = 9
     def get_labels(self):
         """Return 7 labels for the x-axis."""
         labels = [i for i in range(24)]
@@ -79,7 +76,7 @@ class TimeChartJSONView(BaseLineChartView):
     def get_data(self):
         """Return datasets to plot."""
 
-        data = json.loads(Urls.objects.get(pk=self.id).poptime)
+        data = json.loads(Urls.objects.get(pk=self.kwargs['pk']).poptime)
 
         return data
 
