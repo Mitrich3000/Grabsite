@@ -1,2 +1,2 @@
 # Grabsite
-Example grabbing site
+Example grabbing site (Celery, BS4, Chart.js).
