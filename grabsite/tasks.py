@@ -64,7 +64,7 @@ def get_weekday(dates):
 
     field = lambda x: x.isoweekday()
     weekday = dict([(weekday, sum(1 for _ in items)) for weekday, items in groupby(dates, field)])
-    data = {i: 0 for i in range(7)}
+    data = {i: 0 for i in range(1,8)}
     data.update(weekday)
     data = [[v for k, v in data.items()]]
 

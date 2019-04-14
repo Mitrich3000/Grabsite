@@ -119,3 +119,6 @@ SERVER_EMAIL = EMAIL_HOST_USER
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 SITE_URL = 'https:\\example.com'
+
+LOGIN_REDIRECT_URL = 'index'
+LOGIN_URL = 'accounts/login/'

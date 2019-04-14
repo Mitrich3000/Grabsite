@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Вход{% endblock %}
+{% block content %}
+    <div class="col-xs-3"></div>
+    <div class="col-xs-6" align="center">
+        <h1>Вход</h1>
+        <form class="form-signin" role="form" method="post" action=".">
+            {% csrf_token %}
+            <h2 class="form-signin-heading">Пожалуйста, авторизируйтесь</h2>
+            <p style="color: #004e00">(напоминаем шаблоны: Фамилия_Имя и пароль не менее 8 знаков)</p>
+            <label for="inputUsername" class="sr-only">Имя пользователя</label>
+            <input type="text" id="id_username" class="form-control" name="username" placeholder="Username"
+                   required autofocus>
+            <label for="inputPassword" class="sr-only">Пароль</label>
+            <input type="password" id="id_password" class="form-control" name="password" placeholder="Password"
+                   required>
+            <br>
+            <button class="btn" type="submit" value="Войти">Войти</button>
+            <input type="hidden" name="next" value="{{ next }}"/>
+        </form>
+        <br>
+        <p>
+            Не зарегистрированы?
+            <a href="#">Зарегистрироваться</a>
+            Забыли пароль?
+        <a href="#">Восстановить пароль</a>
+        </p>
+    <br>
+    </div>
+
+{% endblock %}

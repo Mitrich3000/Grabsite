@@ -2,9 +2,10 @@ import json
 
 from chartjs.views.lines import BaseLineChartView
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
-from django.views.generic import TemplateView, ListView, DetailView
+from django.views.generic import TemplateView, ListView, DetailView, FormView
 
 from grabsite.models import Urls
 from .forms import MyForm
@@ -28,6 +29,17 @@ def index(request, **kwargs):
 
     return render(request, 'index.html', {"form": form})
 
+class RegisterFormView(FormView):
+    form_class = UserCreationForm
+    success_url = "/login/"
+    template_name = "register.html"
+
+    def form_valid(self, form):
+        # Создаём пользователя, если данные в форму были введены корректно.
+        form.save()
+
+        # Вызываем метод базового класса
+        return super(RegisterFormView, self).form_valid(form)
 
 class UrlsDetailView(LoginRequiredMixin, DetailView):
     model = Urls
@@ -46,7 +58,7 @@ class UrlListView(LoginRequiredMixin, ListView):
 class WeekDayChartJSONView(BaseLineChartView):
     def get_labels(self):
         """Return 7 labels for the x-axis."""
-        return ["Воскресенье", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"]
+        return ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"]
 
     def get_providers(self):
         """Return names of datasets."""
