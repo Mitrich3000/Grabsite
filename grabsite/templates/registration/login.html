@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 {% block title %}Вход{% endblock %}
 {% block content %}
-    <div class="col-xs-3"></div>
-    <div class="col-xs-6" align="center">
+
+    <div class="container" align="center" style="width: 500px">
         <h1>Вход</h1>
         <form class="form-signin" role="form" method="post" action=".">
             {% csrf_token %}
@@ -21,11 +21,11 @@
         <br>
         <p>
             Не зарегистрированы?
-            <a href="#">Зарегистрироваться</a>
+            <a href="{% url 'grabsite:signup' %}">Зарегистрироваться</a>
             Забыли пароль?
-        <a href="#">Восстановить пароль</a>
+            <a href="#">Восстановить пароль</a>
         </p>
-    <br>
+        <br>
     </div>
 
 {% endblock %}

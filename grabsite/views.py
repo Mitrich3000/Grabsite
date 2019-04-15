@@ -29,10 +29,11 @@ def index(request, **kwargs):
 
     return render(request, 'index.html', {"form": form})
 
+
 class RegisterFormView(FormView):
     form_class = UserCreationForm
-    success_url = "/login/"
-    template_name = "register.html"
+    success_url = "/"
+    template_name = "registration/register.html"
 
     def form_valid(self, form):
         # Создаём пользователя, если данные в форму были введены корректно.
@@ -40,6 +41,7 @@ class RegisterFormView(FormView):
 
         # Вызываем метод базового класса
         return super(RegisterFormView, self).form_valid(form)
+
 
 class UrlsDetailView(LoginRequiredMixin, DetailView):
     model = Urls
