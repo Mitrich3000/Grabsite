@@ -5,7 +5,7 @@ celery==4.2.2
 certifi==2019.3.9
 chardet==3.0.4
 defusedxml==0.5.0
-Django==2.1.7
+Django==2.2.10
 django-bootstrap4==0.0.8
 django-braces==1.13.0
 django-chartjs==1.3
